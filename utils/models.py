@@ -2,8 +2,11 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from keras.regularizers import l2
 
-class NeuralNetwork(nn.Module):
+class pytorch_nn(nn.Module):
     def __init__(self, layers: int = 4, input_dimension: int = 1, output_dimension: int = 1, hidden_nodes = None, activation_function = None, softmax: bool = False):
         super().__init__()
         self.input_dimension = input_dimension
@@ -58,6 +61,10 @@ class NeuralNetwork(nn.Module):
             y_pred = self(x_tensor)
             return (y_pred)
 
-
-            
-            
+def keras_nn (input_dim = 2, output_dim = 2, hidden_layers = 2, activation = 'relu', hidden_nodes = 4, final_activation = 'softmax', l2_lambda = 0.01):
+    model = Sequential()
+    model.add(Dense(units = hidden_nodes, activation = activation, input_dim = input_dim, kernel_regularizer=l2(l2_lambda)))
+    for _ in range (hidden_layers):
+        model.add(Dense(units = hidden_nodes, activation = activation, kernel_regularizer=l2(l2_lambda)))
+    model.add(Dense(units = output_dim, activation = final_activation, kernel_regularizer=l2(l2_lambda)))
+    return (model)
