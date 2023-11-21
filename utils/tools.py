@@ -4,7 +4,8 @@ import numpy as np
 def get_cov(sdx=1., sdy=1., rotangdeg=0.):
     covar = np.array([[sdx, 0], [0, sdy]])
     rot_ang = rotangdeg / 360 * 2 * np.pi
-    rot_mat = np.array([[np.cos(rot_ang), -np.sin(rot_ang)], [np.sin(rot_ang), np.cos(rot_ang)]])
+    rot_mat = np.array([[np.cos(rot_ang), -np.sin(rot_ang)],
+                       [np.sin(rot_ang), np.cos(rot_ang)]])
 
     covar = np.matmul(np.matmul(rot_mat, covar), rot_mat.transpose())
     return covar
@@ -80,6 +81,18 @@ def gen_xor_distribution(n=100):
                           np.random.multivariate_normal([2.3, -2.3], get_cov(0.4, 0.1, 45), b)])
     xc = np.array(np.concatenate([xc1, xc2]))
 
-    y = np.array(np.concatenate([np.zeros([2 * a, 1]), np.ones([a+b, 1])])).squeeze()
+    y = np.array(np.concatenate(
+        [np.zeros([2 * a, 1]), np.ones([a+b, 1])])).squeeze()
     X = xc
     return X, y
+
+
+def gen_Xgrid(nx, range):
+    # Define our sample space
+    x1, x2 = np.linspace(range[0], range[1], nx), np.linspace(
+        range[0], range[1], nx)
+    x1grid, x2grid = np.meshgrid(x1, x2)
+    size = nx*nx
+    x1grid, x2grid = x1grid.reshape(size, -1), x2grid.reshape(size, -1)
+    Xgrid = np.concatenate((x1grid, x2grid), axis=1)
+    return Xgrid, x1, x2
