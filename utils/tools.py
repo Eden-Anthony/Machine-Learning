@@ -87,10 +87,10 @@ def gen_xor_distribution(n=100):
     return X, y
 
 
-def gen_Xgrid(nx, range):
+def gen_Xgrid(nx, ny, xrange, yrange):
     # Define our sample space
-    x1, x2 = np.linspace(range[0], range[1], nx), np.linspace(
-        range[0], range[1], nx)
+    x1, x2 = np.linspace(xrange[0], xrange[1], nx), np.linspace(
+        yrange[0], yrange[1], ny)
     x1grid, x2grid = np.meshgrid(x1, x2)
     size = nx*nx
     x1grid, x2grid = x1grid.reshape(size, -1), x2grid.reshape(size, -1)
